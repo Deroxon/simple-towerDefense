@@ -32,7 +32,7 @@ public class LevelManager : MonoBehaviour
 
         string[] mapData = new string[]
         {
-            "0000", "1111", "2222", "3333", "4444", "5555"
+            "0000", "1111", "2222", "3333", "4444", "5555", "6666"
         };
 
         int mapX = mapData[0].ToCharArray().Length;
