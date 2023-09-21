@@ -11,6 +11,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private cameraMovement CameraMovement;
 
+    // dictionary hold the point as key and hold this tile on some point
+    public Dictionary<Point, TileScript> Tiles { get; set; } 
+
     public float TileSize
     {
         // calculate how big our tiles are, this is used to place out tiles on the correct positions
@@ -22,6 +25,9 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Point p = new Point(0, 0);
+        Debug.Log(p.X);
+
         CreateLevel();
     }
 
@@ -29,10 +35,16 @@ public class LevelManager : MonoBehaviour
     void Update()
     {
 
+
     }
+
+
+
 
     private void CreateLevel()
     {
+
+        Tiles = new Dictionary<Point, TileScript>();
 
         string[] mapData = ReadLevelText();
 
@@ -52,24 +64,31 @@ public class LevelManager : MonoBehaviour
             for (int x = 0; x < mapX; x++)
             {
                 // places the tile in the world
-               maxTile = PlaceTile(newTiles[x].ToString(), x, y, worldStart);
+                PlaceTile(newTiles[x].ToString(), x, y, worldStart);
             }
 
         }
+        // finding the max tile on the last position
+        maxTile = Tiles[new Point(mapX-1, mapY-1) ].transform.position;
+
         // beacuse there was problem with getting last tile we adding one more TileSize to our coordiantes, which mean we achieve the last position of tileSize
         CameraMovement.setLimits(new Vector3(maxTile.x + TileSize, maxTile.y - TileSize));
     }
 
-    private Vector3 PlaceTile(string tileType, int x, int y, Vector3 worldStart)
+    private void PlaceTile(string tileType, int x, int y, Vector3 worldStart)
     {
         // "1" = 1 Parses the tiletype to an int, so that we can use it as indexer when we create a new tile
         int tileIndex = int.Parse(tileType);
 
-        //Creates a new tile and makes a reference to that tile in the newTile variable
-        GameObject newTile = Instantiate(tilePrefabs[tileIndex]);
-        newTile.transform.position = new Vector3(worldStart.x + (TileSize * x), worldStart.y - (TileSize * y), 0);
+        //Creates a new tile and makes a reference to that tile in the newTile variable and using Component TileScript to get access to Setup() function
+        TileScript newTile = Instantiate(tilePrefabs[tileIndex]).GetComponent<TileScript>();
+   
+        // Uses the new tile variable to change the position of the tile
+        newTile.Setup(new Point(x, y), new Vector3(worldStart.x + (TileSize * x), worldStart.y - (TileSize * y), 0) );
 
-        return newTile.transform.position;
+        Tiles.Add(new Point(x, y), newTile);
+
+
 
     }
 
@@ -78,9 +97,9 @@ public class LevelManager : MonoBehaviour
         TextAsset bindData = Resources.Load("Level") as TextAsset;
 
         string tmpData = bindData.text.Replace(Environment.NewLine, string.Empty);
-        
+
 
         return tmpData.Split("-");
     }
-    
+
 }
