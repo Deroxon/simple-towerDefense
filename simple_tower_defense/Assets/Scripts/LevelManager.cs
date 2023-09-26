@@ -11,6 +11,11 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private cameraMovement CameraMovement;
 
+    private Point spawner;
+
+    [SerializeField]
+    private GameObject coinPortalPrefab;
+
     // dictionary hold the point as key and hold this tile on some point
     public Dictionary<Point, TileScript> Tiles { get; set; } 
 
@@ -73,6 +78,8 @@ public class LevelManager : MonoBehaviour
 
         // beacuse there was problem with getting last tile we adding one more TileSize to our coordiantes, which mean we achieve the last position of tileSize
         CameraMovement.setLimits(new Vector3(maxTile.x + TileSize, maxTile.y - TileSize));
+
+        SpawnPortal();
     }
 
     private void PlaceTile(string tileType, int x, int y, Vector3 worldStart)
@@ -100,6 +107,17 @@ public class LevelManager : MonoBehaviour
 
 
         return tmpData.Split("-");
+    }
+
+    private void SpawnPortal()
+    {
+        spawner = new Point(0, 0);
+        // spawning object coinPortalPrefab on Tiles dictionary spawner - position 0 - left top corner, quaternion - no rotate
+        Instantiate(coinPortalPrefab, Tiles[spawner].GetComponent<TileScript>().WorldPosition, Quaternion.identity) ;
+
+
+        //to present that we can manipulate tiles
+       //  Instantiate(coinPortalPrefab, Tiles[new Point(13,7)].GetComponent<TileScript>().WorldPosition, Quaternion.identity);
     }
 
 }

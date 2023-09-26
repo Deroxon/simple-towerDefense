@@ -262,6 +262,7 @@ MonoBehaviour:
   - {fileID: 1523729870820094909, guid: 3903198a778754749bc5b667b654fc58, type: 3}
   - {fileID: 6269687983438643218, guid: c8306819ffcf9ee4982bd03417cfc2e2, type: 3}
   CameraMovement: {fileID: 519420033}
+  coinPortalPrefab: {fileID: 1672320812388167945, guid: 6062596961d1a834c88cbc00663f0ca6, type: 3}
 --- !u!4 &2126652453
 Transform:
   m_ObjectHideFlags: 0
