@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : Singleton<LevelManager> 
 {
     [SerializeField]
     private GameObject[] tilePrefabs;
 
     [SerializeField]
     private cameraMovement CameraMovement;
+
+    [SerializeField]
+    private Transform map;
 
     private Point spawner;
 
@@ -91,9 +94,9 @@ public class LevelManager : MonoBehaviour
         TileScript newTile = Instantiate(tilePrefabs[tileIndex]).GetComponent<TileScript>();
    
         // Uses the new tile variable to change the position of the tile
-        newTile.Setup(new Point(x, y), new Vector3(worldStart.x + (TileSize * x), worldStart.y - (TileSize * y), 0) );
+        newTile.Setup(new Point(x, y), new Vector3(worldStart.x + (TileSize * x), worldStart.y - (TileSize * y), 0), map );
 
-        Tiles.Add(new Point(x, y), newTile);
+     
 
 
 
